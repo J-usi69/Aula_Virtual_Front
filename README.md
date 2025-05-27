@@ -5,7 +5,7 @@
 para iniciar usar los comandos
 
 ```
- npm intall
+ npm install
  yarn
 
 ```
