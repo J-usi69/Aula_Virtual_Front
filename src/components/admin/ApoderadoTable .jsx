@@ -16,6 +16,7 @@ const ApoderadoTable = ({ apoderados, onEdit, onDelete }) => {
         <table className="w-full text-left border-collapse">
           <thead className="sticky top-0 bg-primary text-white z-10">
             <tr>
+              <th className="p-3">Foto</th>
               <th className="p-3">Nombre</th>
               <th className="p-3">Apellido</th>
               <th className="p-3">CI</th>
@@ -27,6 +28,16 @@ const ApoderadoTable = ({ apoderados, onEdit, onDelete }) => {
           <tbody>
             {apoderados.map((apo) => (
               <tr key={apo.apoderado_id} className="border-b hover:bg-gray-50 dark:hover:bg-dark-600">
+                <td className="p-3">
+                  {apo.user?.photo_url ? (
+                    <img
+                      src={apo.user.photo_url}
+                      alt="Foto"
+                      className="w-10 h-10 rounded-full object-cover mx-auto"
+                    />
+                  ) : (
+                    <span className="text-gray-500">Sin foto</span>
+                  )} </td>
                 <td className="p-3 font-medium text-gray-800">{apo.nombre}</td>
                 <td className="p-3 text-gray-700">{apo.apellido}</td>
                 <td className="p-3 text-gray-700">{apo.ci}</td>
