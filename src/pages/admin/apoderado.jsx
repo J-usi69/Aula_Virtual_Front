@@ -26,11 +26,9 @@ const ApoderadoPage = () => {
   const handleCreateOrUpdate = async (formData) => {
     const id = formData.get("apoderado_id");
 
-    for (const pair of formData.entries()) {
+    /*for (const pair of formData.entries()) {
       console.log(pair[0], ":", pair[1]);
-    }
-
-    console.log(id, "ID del apoderado");
+    }*/
 
     if (isEditing && id) {
       await patchApoderado(id, formData);
