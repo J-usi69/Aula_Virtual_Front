@@ -16,8 +16,8 @@ function App() {
 
         <div className={`flex flex-col flex-grow w-full ${!isLoginPage ? "md:ml-64" : ""}`}>
           {!isLoginPage && <Navbar />}
-          <div className="mt-15">
-            <main className={`flex-grow ${!isLoginPage ? "p-4" : ""}`}>
+          <div className="">
+            <main className={`flex-grow ${!isLoginPage ? "p-4 mt-15" : ""}`}>
               <AppRouter />
             </main>
           </div>
