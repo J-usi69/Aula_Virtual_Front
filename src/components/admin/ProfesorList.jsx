@@ -52,7 +52,7 @@ const ProfesorList = ({ profesores, onEdit, onDelete }) => {
 
       <div className="overflow-x-auto rounded-2xl border border-gray-200 flex-grow">
         <div className="max-h-[500px] overflow-y-auto text-xs">
-          <table className="min-w-[900px] w-full border-collapse table-auto text-[11px] sm:text-xs">
+          <table className="min-w-[900px] border-gray-200 w-full border-collapse table-auto text-[11px] sm:text-xs">
             <thead className="sticky top-0 bg-primary text-white z-10 text-[10px] sm:text-xs">
               <tr>
                 <th className="border px-2 py-2 w-8 text-center">#</th>
@@ -70,7 +70,7 @@ const ProfesorList = ({ profesores, onEdit, onDelete }) => {
                 const { profesor, user, materias } = entry;
                 return (
                   <Fragment key={profesor.id}>
-                    <tr className="hover:bg-gray-100 dark:hover:bg-dark-600">
+                    <tr className="border-gray-200 hover:bg-gray-100 dark:hover:bg-dark-600">
                       <td className="border px-2 py-1 text-center">
                         <button
                           onClick={() => toggleOpen(profesor.id)}

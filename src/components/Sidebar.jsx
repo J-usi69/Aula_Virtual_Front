@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   FaBars, FaTimes, FaUserShield, FaChalkboardTeacher, FaUserGraduate,
-  FaFileAlt, FaClock, FaBook, FaUserTie, FaCalendarAlt
+  FaFileAlt, FaClock, FaBook, FaUserTie, FaCalendarAlt, FaMoneyBillWave
 } from "react-icons/fa";
 import logo from "../assets/brain-logo.png";
 
@@ -12,7 +12,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Botón Hamburguesa */}
       <button
         className="md:hidden fixed top-4 left-4 z-70 text-white text-2xl"
         onClick={toggleSidebar}
@@ -36,10 +35,11 @@ const Sidebar = () => {
               { to: "/admin/profesor", icon: <FaChalkboardTeacher />, label: "Profesores" },
               { to: "/admin/apoderado", icon: <FaUserTie />, label: "Apoderados" },
               { to: "/admin/estudiantes", icon: <FaUserGraduate />, label: "Estudiantes" },
-              { to: "/admin/matricula", icon: <FaFileAlt />, label: "Matrícula" },
+              { to: "/admin/inscripcion", icon: <FaFileAlt />, label: "Inscripción" },
               { to: "/admin/materia", icon: <FaBook />, label: "Materias" },
               { to: "/admin/horario", icon: <FaClock />, label: "Horario" },
               { to: "/admin/gestion", icon: <FaCalendarAlt />, label: "Gestiones" },
+              { to: "/admin/matricula", icon: <FaMoneyBillWave />, label: "Pago de Matricula" }
             ].map(({ to, icon, label }) => (
               <NavLink
                 key={to}

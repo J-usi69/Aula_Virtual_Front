@@ -21,6 +21,11 @@ export const patchApoderado = async (id, apoderadoData) => {
 }
 
 export const deleteApoderado = async (id) => {
-  const response = await axiosInstance.delete(`apoderados/eliminar/${id}`);
+  const response = await axiosInstance.delete(`apoderados/eliminar_definitivamente/${id}`);
+  return response.data;
+}
+
+export const getApoderadoByCi = async (ci) => {
+  const response = await axiosInstance.get(`apoderados/buscar?ci=${ci}`);
   return response.data;
 }

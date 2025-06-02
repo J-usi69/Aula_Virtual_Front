@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaBook, FaSave, FaTimes } from "react-icons/fa";
+import { FaSave, FaTimes } from "react-icons/fa";
 
 const MateriaForm = ({ onSubmit, initialData, isEditing, onCancel }) => {
   const [formData, setFormData] = useState({ sigla: "", nombre: "" });
