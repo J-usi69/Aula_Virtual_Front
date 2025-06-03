@@ -9,6 +9,8 @@ import ProfesorPage from '../pages/admin/profesor';
 import ApoderadoPage from '../pages/admin/apoderado';
 import EstudiantePage from '../pages/admin/estudiante';
 import GestionPage from '../pages/admin/gestion';
+import BoletasPage from '../pages/admin/boleta';
+import PagosMatriculaPage from '../pages/admin/matricula';
 
 
 export const AppRouter = () => {
@@ -25,6 +27,8 @@ export const AppRouter = () => {
       <Route path="/admin/apoderado" element={<ApoderadoPage />} />
       <Route path="/admin/estudiantes" element={<EstudiantePage />} />
       <Route path="/admin/gestion" element={<GestionPage />} />
+      <Route path="/admin/inscripcion" element={<BoletasPage />} />
+      <Route path="/admin/matricula" element={<PagosMatriculaPage />} />
 
       
       {/* Profesor */}

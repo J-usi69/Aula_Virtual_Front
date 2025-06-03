@@ -35,10 +35,10 @@ const Sidebar = () => {
               { to: "/admin/profesor", icon: <FaChalkboardTeacher />, label: "Profesores" },
               { to: "/admin/apoderado", icon: <FaUserTie />, label: "Apoderados" },
               { to: "/admin/estudiantes", icon: <FaUserGraduate />, label: "Estudiantes" },
-              { to: "/admin/inscripcion", icon: <FaFileAlt />, label: "Inscripción" },
               { to: "/admin/materia", icon: <FaBook />, label: "Materias" },
               { to: "/admin/horario", icon: <FaClock />, label: "Horario" },
               { to: "/admin/gestion", icon: <FaCalendarAlt />, label: "Gestiones" },
+              { to: "/admin/inscripcion", icon: <FaFileAlt />, label: "Boleta de Inscripción" },
               { to: "/admin/matricula", icon: <FaMoneyBillWave />, label: "Pago de Matricula" }
             ].map(({ to, icon, label }) => (
               <NavLink
