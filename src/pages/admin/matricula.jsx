@@ -9,6 +9,9 @@ export default function PagosMatriculaPage() {
 
   return (
     <div className="container mx-auto p-4">
+      <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4">
+        Gestión de Pagos de Matrícula
+      </h1>
       <PagoMatriculaForm onMatriculaRegistrada={actualizarLista} />
       <PagoMatriculaList refreshTrigger={refresh} />
     </div>

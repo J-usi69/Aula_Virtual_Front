@@ -13,7 +13,7 @@ export default function BoletasPage() {
 
   return (
     <div className="max-w-4xl mx-auto mt-6 space-y-6">
-      <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4 text-center">
+      <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4">
         Gestión de Boletas de Inscripción
       </h1>
       <BoletaForm

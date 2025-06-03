@@ -55,7 +55,7 @@ const MateriaPage = () => {
 
   return (
     <div className="p-4 sm:p-6 bg-white shadow-md rounded-xl mx-auto max-w-7xl">
-      <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4 text-center">
+      <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4 ">
         Gestión de Materias
       </h1>
 

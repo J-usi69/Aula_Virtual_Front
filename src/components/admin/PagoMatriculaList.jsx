@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMatriculas, deleteMatricula } from "../../services/pagoMatricula";
+import { FaTrash } from "react-icons/fa";
 
 export default function PagoMatriculaList({ refreshTrigger }) {
   const [pagos, setPagos] = useState([]);
@@ -32,38 +33,38 @@ export default function PagoMatriculaList({ refreshTrigger }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-primary">Pagos de Matrícula Registrados</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="px-4 py-2">Estudiante</th>
-              <th className="px-4 py-2">CI</th>
-              <th className="px-4 py-2">Monto Bs.</th>
-              <th className="px-4 py-2">Subgestión</th>
-              <th className="px-4 py-2">Fecha</th>
-              <th className="px-4 py-2">Acciones</th>
+    <div className="bg-white dark:bg-dark-700 shadow-md rounded-xl p-3 text-sm">
+      <h2 className="text-lg font-bold text-primary mb-3">Pagos de Matrícula Registrados</h2>
+      <div className="max-h-[360px] overflow-y-auto rounded-md border border-gray-200 text-xs">
+        <table className="w-full text-left border-collapse">
+          <thead className="sticky top-0 bg-primary text-white z-10 text-xs">
+            <tr>
+              <th className="p-2">Estudiante</th>
+              <th className="p-2">CI</th>
+              <th className="p-2">Monto Bs.</th>
+              <th className="p-2">Subgestión</th>
+              <th className="p-2">Fecha</th>
+              <th className="p-2 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {pagos.map((pago) => (
-              <tr key={pago._key} className="border-t">
-                <td className="px-4 py-2">
+              <tr key={pago._key} className="border-b hover:bg-gray-50 dark:hover:bg-dark-600">
+                <td className="p-2 font-medium text-gray-800 whitespace-nowrap">
                   {pago.estudiante?.nombre} {pago.estudiante?.apellido}
                 </td>
-                <td className="px-4 py-2">{pago.estudiante?.ci}</td>
-                <td className="px-4 py-2">{pago.monto} Bs.</td>
-                <td className="px-4 py-2">
+                <td className="p-2 text-gray-600">{pago.estudiante?.ci}</td>
+                <td className="p-2 text-gray-600">{pago.monto} Bs.</td>
+                <td className="p-2 text-gray-600 whitespace-nowrap">
                   {pago.subgestion?.gestion_nombre} - {pago.subgestion?.nombre}
                 </td>
-                <td className="px-4 py-2">{pago.fecha}</td>
-
-                <td className="px-4 py-2">
+                <td className="p-2 text-gray-600">{pago.fecha}</td>
+                <td className="p-2 flex justify-center gap-1 flex-wrap">
                   <button
                     onClick={() => handleDelete(pago.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded transition flex items-center gap-1 text-xs"
                   >
+                    <FaTrash />
                     Eliminar
                   </button>
                 </td>
@@ -71,7 +72,7 @@ export default function PagoMatriculaList({ refreshTrigger }) {
             ))}
             {pagos.length === 0 && (
               <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
+                <td colSpan="6" className="text-center py-4 text-gray-500">
                   No hay pagos registrados
                 </td>
               </tr>

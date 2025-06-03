@@ -30,9 +30,6 @@ export const AppRouter = () => {
       <Route path="/admin/inscripcion" element={<BoletasPage />} />
       <Route path="/admin/matricula" element={<PagosMatriculaPage />} />
 
-      
-      {/* Profesor */}
-
     </Routes>
   );
 };
