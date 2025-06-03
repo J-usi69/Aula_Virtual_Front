@@ -1,0 +1,89 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { getProfesorGestion } from "../../services/ProfesorAulaService";
+import materiaImg from "../../assets/materia.png";
+import { useNavigate } from "react-router-dom";
+
+const Home = () => {
+  const { user } = useAuth();
+  const [materias, setMaterias] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchMaterias = async () => {
+      try {
+        const data = await getProfesorGestion(user.profesor.id);
+        console.log("Profesor ID:", user.profesor.id);
+        const gestionCursoMateria = [];
+
+        data.gestion.forEach((gestion) => {
+          gestion.gestion_curso_paralelo.forEach((gcp) => {
+            gcp.materia.forEach((mat) => {
+              mat.cursos_paralelo.forEach((cp) => {
+                gestionCursoMateria.push({
+                  gestion: gestion.gestion_nombre,
+                  materia: mat.materia_nombre,
+                  materia_id: mat.materia_id,
+                  curso: cp.curso_nombre,
+                  paralelo: cp.paralelo_nombre,
+                  paralelo_id: cp.paralelo_id,
+                  horario: cp.horario,
+                  gestion_curso_paralelo_id: gcp.gestion_curso_paralelo_id,
+                });
+              });
+            });
+          });
+        });
+
+        setMaterias(gestionCursoMateria);
+      } catch (error) {
+        console.error("Error al cargar las materias del profesor:", error);
+      }
+    };
+
+    if (user?.profesor?.id) {
+      fetchMaterias();
+    }
+  }, [user]);
+
+  return (
+    <div className="p-4 mt-5 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <h1 className="text-2xl font-bold mb-6 col-span-full">Materias Asignadas</h1>
+      {materias.map((item, idx) => (
+        <div key={idx} className="bg-white rounded-2xl shadow-lg p-4 flex flex-col items-center text-center">
+          <img src={materiaImg} alt="Materia" className="h-24 mb-4" />
+          <h3 className="text-lg font-bold mb-1">{item.materia}</h3>
+          <p className="text-sm text-gray-600 mb-1">
+            {item.gestion} - {item.curso} "{item.paralelo}"
+          </p>
+          <p className="text-sm text-gray-600 mb-4">
+            {item.horario?.dias?.join(", ")}<br />
+            {item.horario?.horario_inicio} - {item.horario?.horario_final}
+          </p>
+          <div className="flex gap-2 flex-wrap justify-center">
+            <button
+              onClick={() => navigate(`/profesor/participacion/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
+              className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-xl"
+            >
+              Participación
+            </button>
+            <button
+              onClick={() => navigate(`/profesor/asistencia/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
+              className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-xl"
+            >
+              Asistencia
+            </button>
+            <button
+              onClick={() => navigate(`/nota/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded-xl"
+            >
+              Nota
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Home;
