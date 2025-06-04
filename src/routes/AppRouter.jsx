@@ -18,10 +18,7 @@ import PagosMatriculaPage from '../pages/admin/matricula';
 import Home from '../pages/profesor/home';
 import ParticipacionPage from '../pages/profesor/Participacion';
 import AsistenciaPage from '../pages/profesor/AsistenciaPage';
-<<<<<<< HEAD
-=======
 import NotasFinalesPage from '../pages/profesor/NotasPage';
->>>>>>> upstream/main
 /*
 import AsistenciaPage from '../pages/profesor/AsistenciaPage';
 import NotasPage from '../pages/profesor/NotasPage';
@@ -52,10 +49,7 @@ export const AppRouter = () => {
         <Route index element={<Home />} />
         <Route path="participacion/:gcpId/:materiaId/:paraleloId" element={<ParticipacionPage />} />
         <Route path="asistencia/:gcpId/:materiaId/:paraleloId" element={<AsistenciaPage />} />
-<<<<<<< HEAD
-=======
         <Route path="notas/:gcpId/:materiaId/:paraleloId" element={<NotasFinalesPage />} />
->>>>>>> upstream/main
         
        
       </Route>

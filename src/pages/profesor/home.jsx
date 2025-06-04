@@ -1,189 +1,113 @@
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { getProfesorGestion } from "../../services/ProfesorAulaService";
-import materiaImg from "../../assets/materia.png";
-import { useNavigate } from "react-router-dom";
+import { getProfesorGestion, guardarNota } from "../../services/ProfesorAulaService";
 
-const Home = () => {
+export default function NotasFinalesPage() {
+  const { gcpId, materiaId } = useParams();
   const { user } = useAuth();
-  const [materias, setMaterias] = useState([]);
-<<<<<<< HEAD
-=======
-  const [filteredMaterias, setFilteredMaterias] = useState([]);
-  const [gestiones, setGestiones] = useState([]);
-  const [selectedGestion, setSelectedGestion] = useState("");
->>>>>>> upstream/main
-  const navigate = useNavigate();
+  const [estudiantes, setEstudiantes] = useState([]);
 
   useEffect(() => {
-    const fetchMaterias = async () => {
-      try {
-        const data = await getProfesorGestion(user.profesor.id);
-<<<<<<< HEAD
-        console.log("Profesor ID:", user.profesor.id);
-        const gestionCursoMateria = [];
-
-        data.gestion.forEach((gestion) => {
-=======
-        const gestionCursoMateria = [];
-        const gestionesSet = new Set();
-
-        data.gestion.forEach((gestion) => {
-          gestionesSet.add(gestion.gestion_nombre);
->>>>>>> upstream/main
-          gestion.gestion_curso_paralelo.forEach((gcp) => {
-            gcp.materia.forEach((mat) => {
-              mat.cursos_paralelo.forEach((cp) => {
-                gestionCursoMateria.push({
-                  gestion: gestion.gestion_nombre,
-                  materia: mat.materia_nombre,
-                  materia_id: mat.materia_id,
-                  curso: cp.curso_nombre,
-                  paralelo: cp.paralelo_nombre,
-                  paralelo_id: cp.paralelo_id,
-                  horario: cp.horario,
-                  gestion_curso_paralelo_id: gcp.gestion_curso_paralelo_id,
-                });
-              });
-            });
-          });
-        });
-
-        setMaterias(gestionCursoMateria);
-<<<<<<< HEAD
-=======
-        setFilteredMaterias(gestionCursoMateria);
-        setGestiones(Array.from(gestionesSet));
->>>>>>> upstream/main
-      } catch (error) {
-        console.error("Error al cargar las materias del profesor:", error);
-      }
-    };
-
     if (user?.profesor?.id) {
-      fetchMaterias();
-    }
-  }, [user]);
+      getProfesorGestion(user.profesor.id)
+        .then((data) => {
+          const gcp = data.gestion
+            .flatMap((g) => g.gestion_curso_paralelo)
+            .find((g) => g.gestion_curso_paralelo_id === Number(gcpId));
 
-<<<<<<< HEAD
+          if (!gcp) return;
+
+          const estudiantesList = gcp.materia
+            ?.flatMap((m) => m.cursos_paralelo)
+            ?.flatMap((cp) => cp.estudiante) || [];
+
+          setEstudiantes(
+            estudiantesList.map((e) => ({
+              estudiante_id: e.estudiante_id,
+              estudiante_nombre: `${e.estudiante_nombre} ${e.estudiante_apellido}`,
+              promedio_final: "",
+            }))
+          );
+        })
+        .catch(console.error);
+    }
+  }, [user, gcpId]);
+
+  const handleChange = (id, value) => {
+    setEstudiantes((prev) =>
+      prev.map((e) =>
+        e.estudiante_id === id ? { ...e, promedio_final: value } : e
+      )
+    );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const datosInvalidos = estudiantes.some(
+      (e) => e.promedio_final === "" || isNaN(Number(e.promedio_final))
+    );
+    if (datosInvalidos) {
+      alert("Por favor, ingresa todas las notas numéricas.");
+      return;
+    }
+
+    const payload = estudiantes.map(({ estudiante_id, promedio_final }) => ({
+      estudiante_id,
+      promedio_final: parseFloat(promedio_final),
+      gestion_curso_paralelo_id: Number(gcpId),
+      materia_profesor_id: Number(materiaId),
+    }));
+
+    console.log("Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+      for (const nota of payload) {
+        await guardarNota(nota); 
+      }
+      alert("Notas finales registradas correctamente");
+    } catch (error) {
+      alert("Error al guardar las notas");
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="p-4 mt-5 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <h1 className="text-2xl font-bold mb-6 col-span-full">Materias Asignadas</h1>
-      {materias.map((item, idx) => (
-        <div key={idx} className="bg-white rounded-2xl shadow-lg p-4 flex flex-col items-center text-center">
-          <img src={materiaImg} alt="Materia" className="h-24 mb-4" />
-          <h3 className="text-lg font-bold mb-1">{item.materia}</h3>
-          <p className="text-sm text-gray-600 mb-1">
-            {item.gestion} - {item.curso} "{item.paralelo}"
-          </p>
-          <p className="text-sm text-gray-600 mb-4">
-            {item.horario?.dias?.join(", ")}<br />
-            {item.horario?.horario_inicio} - {item.horario?.horario_final}
-          </p>
-          <div className="flex gap-2 flex-wrap justify-center">
-            <button
-              onClick={() => navigate(`/profesor/participacion/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
-              className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-xl"
-            >
-              Participación
-            </button>
-            <button
-              onClick={() => navigate(`/profesor/asistencia/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
-              className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-xl"
-            >
-              Asistencia
-            </button>
-            <button
-              onClick={() => navigate(`/nota/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`)}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded-xl"
-            >
-              Nota
-            </button>
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">Registrar Notas Finales</h1>
+
+      <form onSubmit={handleSubmit}>
+        {estudiantes.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 max-h-96 overflow-auto border border-gray-300 rounded p-4">
+            {estudiantes.map((est) => (
+              <div key={est.estudiante_id} className="flex flex-col">
+                <label className="font-medium mb-1">{est.estudiante_nombre}</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={est.promedio_final}
+                  onChange={(e) => handleChange(est.estudiante_id, e.target.value)}
+                  className="border border-gray-300 rounded px-3 py-2"
+                  placeholder="Promedio Final"
+                  required
+                />
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-=======
-  useEffect(() => {
-    if (selectedGestion) {
-      setFilteredMaterias(materias.filter((m) => m.gestion === selectedGestion));
-    } else {
-      setFilteredMaterias(materias);
-    }
-  }, [selectedGestion, materias]);
+        ) : (
+          <p className="text-center text-gray-500">No se encontraron estudiantes.</p>
+        )}
 
-  return (
-    <div className="p-4 mt-5">
-      <h1 className="text-2xl font-bold mb-4">Materias Asignadas</h1>
-
-      <div className="mb-6">
-        <label className="mr-2 font-semibold">Filtrar por Gestión:</label>
-        <select
-          value={selectedGestion}
-          onChange={(e) => setSelectedGestion(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-1"
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded transition"
         >
-          <option value="">Todas</option>
-          {gestiones.map((gestion, idx) => (
-            <option key={idx} value={gestion}>
-              {gestion}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredMaterias.map((item, idx) => (
-          <div
-            key={idx}
-            className="bg-white rounded-2xl shadow-lg p-4 flex flex-col items-center text-center"
-          >
-            <img src={materiaImg} alt="Materia" className="h-24 mb-4" />
-            <h3 className="text-lg font-bold mb-1">{item.materia}</h3>
-            <p className="text-sm text-gray-600 mb-1">
-              {item.gestion} - {item.curso} "{item.paralelo}"
-            </p>
-            <p className="text-sm text-gray-600 mb-4">
-              {item.horario?.dias?.join(", ")}<br />
-              {item.horario?.horario_inicio} - {item.horario?.horario_final}
-            </p>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <button
-                onClick={() =>
-                  navigate(
-                    `/profesor/participacion/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`
-                  )
-                }
-                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-xl"
-              >
-                Participación
-              </button>
-              <button
-                onClick={() =>
-                  navigate(
-                    `/profesor/asistencia/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`
-                  )
-                }
-                className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-xl"
-              >
-                Asistencia
-              </button>
-              <button
-                onClick={() =>
-                  navigate(
-                    `/profesor/notas/${item.gestion_curso_paralelo_id}/${item.materia_id}/${item.paralelo_id}`
-                  )
-                }
-                className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded-xl"
-              >
-                Nota
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
->>>>>>> upstream/main
+          Guardar Notas
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Home;
+}
